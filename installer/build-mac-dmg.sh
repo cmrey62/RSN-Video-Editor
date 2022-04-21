@@ -50,7 +50,7 @@ find "build" \( -iname '*.dylib' -o -iname '*.so' \) -exec codesign -s "OpenShot
 
 echo "Code Sign App Bundle (deep)"
 codesign -s "OpenShot Studios, LLC" --force --deep --entitlements "installer/openshot.entitlements" --options runtime --timestamp=http://timestamp.apple.com/ts01 "build/$OS_APP_NAME"
-codesign -s "OpenShot Studios, LLC" --force --entitlements "installer/qtwebengine.entitlements" --options runtime --timestamp=http://timestamp.apple.com/ts01 "build/$OS_APP_NAME/Contents/MacOS/QtWebEngineProcess"
+codesign -s "OpenShot Studios, LLC" --force --deep --entitlements "installer/qtwebengine.entitlements" --options runtime --timestamp=http://timestamp.apple.com/ts01 "build/$OS_APP_NAME/Contents/MacOS/QtWebEngineProcess"
 
 echo "Verifying App Signing"
 spctl -a -vv "build/$OS_APP_NAME"
@@ -59,7 +59,7 @@ echo "Building Custom DMG"
 appdmg "installer/dmg-template.json" "build/$OS_DMG_NAME"
 
 echo "Code Sign DMG"
-codesign -s "OpenShot Studios, LLC" --force --entitlements "installer/openshot.entitlements" --timestamp=http://timestamp.apple.com/ts01 "build/$OS_DMG_NAME"
+codesign -s "OpenShot Studios, LLC" --force --deep --entitlements "installer/openshot.entitlements" --timestamp=http://timestamp.apple.com/ts01 "build/$OS_DMG_NAME"
 
 echo "Notarize DMG file (send to apple)"
 # No errors uploading '/Users/jonathan/builds/7d5103a1/0/OpenShot/openshot-qt/build/test.zip'.
