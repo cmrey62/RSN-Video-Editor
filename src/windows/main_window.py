@@ -691,12 +691,13 @@ class MainWindow(updates.UpdateWatcher, QMainWindow):
         _ = app._tr
 
         recommended_path = s.getDefaultPath(s.actionType.IMPORT)
+        q_path = QUrl.fromLocalFile(recommended_path)
 
-        fd = QFileDialog()
-        fd.setDirectory(recommended_path)
-        qurl_list = fd.getOpenFileUrls(
+        qurl_list = QFileDialog.getOpenFileUrls(
             self,
-            _("Import Files...")
+            _("Import Files..."),
+            q_path,
+            options=QFileDialog.DontUseNativeDialog
         )[0]
 
         if len(qurl_list):
