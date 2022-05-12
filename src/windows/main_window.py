@@ -691,19 +691,22 @@ class MainWindow(updates.UpdateWatcher, QMainWindow):
         _ = app._tr
 
         recommended_path = s.getDefaultPath(s.actionType.IMPORT)
-        q_path = QUrl.fromLocalFile(recommended_path)
+        log.debug(f"recommended import path: {recommended_path}")
+        recommended_qurl = QUrl.fromLocalFile(recommended_path)
 
         qurl_list = QFileDialog.getOpenFileUrls(
             self,
             _("Import Files..."),
-            q_path,
+            recommended_qurl,
             options=QFileDialog.DontUseNativeDialog
         )[0]
+        log.debug(f"Paths: {qurl_list} selected with dialog")
 
         if len(qurl_list):
             # If any files were imported,
             # Use the folder of the LAST one as the new default path.
-            s.setDefaultPath(s.actionType.IMPORT, qurl_list[-1].path())
+            log.debug(f"setting default import to: {qurl_list[-1].toLocalFile()}")
+            s.setDefaultPath(s.actionType.IMPORT, qurl_list[-1].toLocalFile())
         # Set cursor to waiting
         app.setOverrideCursor(QCursor(Qt.WaitCursor))
 
