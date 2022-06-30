@@ -43,6 +43,7 @@ def get_audio_data(files: dict):
         arg1: a dict of clip_ids grouped by their file_id
     """
 
+    log.debug("getting audio data for : %s" % files)
     for file_id in files:
         clip_list = files[file_id]
 
@@ -91,6 +92,7 @@ def get_waveform_thread(file_id, clip_list):
         sample_divisor = round(sample_rate / samples_per_second)
 
         # Loop through audio samples, and create a list of amplitudes
+        log.debug("Starting file sample loop")
         file_audio_data = []
         for frame_num in range(1, temp_clip.Reader().info.video_length):
             frame = temp_clip.Reader().GetFrame(frame_num)
@@ -103,9 +105,11 @@ def get_waveform_thread(file_id, clip_list):
                 sample_value = frame.GetAudioSample(-1, sample_num, magnitude_range)
                 file_audio_data.append(sample_value)
                 sample_num += sample_divisor
+        log.debug("Finished file sample loop")
 
         # Update file with audio data
         file.data = {"ui": {"audio_data": file_audio_data}}
+        log.debug("Saving File Data")
         file.save()
         return
 
@@ -161,6 +165,7 @@ def get_waveform_thread(file_id, clip_list):
         num_frames = int(clip_reader.get("video_length"))
         fps = get_app().project.get("fps")
         fps_frac = fps["num"] / fps["den"]
+        log.debug("Starting loop applying volume")
         for frame_num in range(1, num_frames):
             volume = clip_instance.volume.GetValue(frame_num)
             if clip_instance.time.GetCount() > 1:
@@ -168,7 +173,9 @@ def get_waveform_thread(file_id, clip_list):
                 frame_num = clip_instance.time.GetValue(frame_num)
             time = frame_num / fps_frac
             clip_audio_data.append(sample_from_time(time) * volume)
+        log.debug("Finished Loop")
 
         # Save this data to the clip object
         clip.data = {"ui": {"audio_data": clip_audio_data}}
+        log.debug("Saving audio data to clip")
         clip.save()
