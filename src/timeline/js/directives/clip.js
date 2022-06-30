@@ -158,11 +158,13 @@ App.directive("tlClip", function ($timeout) {
           //resize the audio canvas to match the new clip width
           if (scope.clip.ui && scope.clip.ui.audio_data) {
             //redraw audio as the resize cleared the canvas
+            console.log("Calling Draw Audio from tlClip.link().stop()");
             drawAudio(scope, scope.clip.id);
           }
           dragLoc = null;
         },
         resize: function (e, ui) {
+          console.log("tlClip Resizing");
           element.find(".point").fadeOut(100);
           element.find(".audio-container").fadeOut(100);
           if (resize_disabled) {
@@ -432,8 +434,10 @@ App.directive("tlAudio",  function ($timeout) {
   return {
     link: function (scope, element, attrs) {
       $timeout(function () {
+        console.log("Timeout Calling drawAudio");
         // Use timeout to wait until after the DOM is manipulated
         let clip_id = attrs.id.replace("audio_clip_", "");
+        console.log(`clip_id = ${clip_id}`);
         drawAudio(scope, clip_id);
       }, 0);
     }

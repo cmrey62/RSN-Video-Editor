@@ -56,9 +56,11 @@ function getTrackContainerHeight() {
 // Draw the audio wave on a clip
 function drawAudio(scope, clip_id) {
   //get the clip in the scope
+  console.log(`In DrawAudio for clipl: ${clip_id}`);
   var clip = findElement(scope.project.clips, "id", clip_id);
 
   if (clip.ui && clip.ui.audio_data) {
+    console.log("ui and audio data detected");
     var element = $("#clip_" + clip_id);
 
     // Determine start and stop samples
@@ -71,8 +73,10 @@ function drawAudio(scope, clip_id) {
     var sample_divisor = samples_per_second / scope.pixelsPerSecond;
 
     //show audio container
+    console.log("Fading in audio container")
     element.find(".audio-container").fadeIn(100);
 
+    console.log("finding audio canvas")
     // Get audio canvas context
     var audio_canvas = element.find(".audio");
     if (!audio_canvas) {
@@ -81,6 +85,7 @@ function drawAudio(scope, clip_id) {
     var ctx = audio_canvas[0].getContext("2d", {alpha: false});
 
     // Clear canvas
+    console.log("Clearing rect")
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     var color = "#2a82da"; // rgb(42,130,218)
@@ -92,6 +97,7 @@ function drawAudio(scope, clip_id) {
     var mid_point = audio_canvas.height() - 8;
     var scale = mid_point;
 
+    console.log("Beginning drawing")
     // Draw the mid-point line
     ctx.beginPath();
     ctx.lineWidth = 1;
@@ -118,6 +124,7 @@ function drawAudio(scope, clip_id) {
       final_sample = (usable_width * sample_divisor) - 1;
     }
 
+    console.log("Starting to loop through samples")
     // Go through all of the (reduced) samples
     // And whenever enough are "collected", draw a block
     for (var i = start_sample; i < final_sample; i++) {
@@ -148,6 +155,7 @@ function drawAudio(scope, clip_id) {
         max = 0;
       }
     }
+    console.log("Loop ended")
   }
 }
 
