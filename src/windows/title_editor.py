@@ -174,6 +174,10 @@ class TitleEditor(QDialog):
         reader.Open()
 
         # Overwrite temp file with thumbnail image and close readers
+        fd = QtGui.QFontDatabase()
+        log.info("Getting thumbnail")
+        log.info(f"Font Family: {self.qfont.family()}")
+        log.info(f"in database?: {self.qfont.family() in fd.families()}")
         reader.GetFrame(1).Thumbnail(
             tmp_filename,
             round(self.lblPreviewLabel.width() * scale),
